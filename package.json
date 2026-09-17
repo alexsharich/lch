@@ -1,0 +1,36 @@
+{
+  "name": "lch",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:alexsharich/lch.git",
+  "author": "alexsharich <alexsharich@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.5.1",
+    "@types/supertest": "^7.2.1",
+    "@typescript-eslint/eslint-plugin": "^8.70.0",
+    "@typescript-eslint/parser": "^8.70.0",
+    "eslint": "^10.10.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "jest": "^30.5.1",
+    "nodemon": "^3.1.14",
+    "prettier": "^3.9.6",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.12",
+    "typescript": "^7.0.2"
+  },
+  "scripts": {
+    "watch": "tsc -w",
+    "dev": "nodemon --inspect dist/index.js",
+    "jest": "jest -i",
+    "lint": "eslint --fix .",
+    "format": "prettier --write ."
+  }
+}

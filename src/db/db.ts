@@ -1,5 +1,11 @@
 import {DriverType, VehicleFeaturesType} from "../drivers/types/drivers";
 
+export type BlogType = {
+    id: string
+    name: string,
+    description: string,
+    websiteUrl: string
+}
 
 export const db = {
     drivers: <DriverType[]>[
@@ -43,4 +49,5 @@ export const db = {
             createdAt: new Date(),
         },
     ],
+    blogs: <BlogType[]>[]
 };

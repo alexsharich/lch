@@ -49,5 +49,15 @@ export const db = {
             createdAt: new Date(),
         },
     ],
-    blogs: <BlogType[]>[]
+    blogs: <BlogType[]>[],
+    posts: <PostType[]>[]
 };
+
+export type PostType = {
+    id: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string,
+    blogName: string
+}

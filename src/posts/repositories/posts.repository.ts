@@ -1,5 +1,5 @@
-import {InputPostType} from "../posts/routes/posts.router";
-import {db} from "../db/db";
+import {db} from "../../db/db";
+import {InputPostType} from "../dto/posts.input.dto";
 
 export const postsRepository = {
     allPosts() {

@@ -1,56 +1,50 @@
 import {Request, Response, Router} from "express";
-import {postsRepository} from "../../repositories/posts.repository";
+import {postsRepository} from "../repositories/posts.repository";
 import {blogsRepository} from "../../blogs/repositories/blogs.repository";
-
-export type InputPostType = {
-    title: string
-    shortDescription: string
-    content: string
-    blogId: string
-}
+import {HttpStatus} from "../../core/types/http-statuses";
 
 export const postsRouter = Router({})
 postsRouter
     .get('', (req: Request, res: Response) => {
         const posts = postsRepository.allPosts()
-        res.sendStatus(200).send(posts)
+        res.sendStatus(HttpStatus.Ok).send(posts)
     })
     .post('', (req: Request, res: Response) => {
         const blog = blogsRepository.findBlog('1')
         if (!blog) {
-            return res.sendStatus(404)
+            return res.sendStatus(HttpStatus.NotFound)
         }
         const post = postsRepository.createPost(blog.id, blog.name, req.body)
         if (!post) {
-            return res.sendStatus(400)
+            return res.sendStatus(HttpStatus.BadRequest)
         }
-        res.sendStatus(201).send(post)
+        res.sendStatus(HttpStatus.Created).send(post)
     })
     .get('/:id', (req: Request, res: Response) => {
         const postId = req.params.id as string
         const post = postsRepository.findPost(postId)
         if (!post) {
-            return res.sendStatus(404)
+            return res.sendStatus(HttpStatus.NotFound)
         }
-        res.sendStatus(200).send(post)
+        res.sendStatus(HttpStatus.Ok).send(post)
     })
     .put('/:id', (req: Request, res: Response) => {
         const blog = blogsRepository.findBlog('1')
         if (!blog) {
-            return res.sendStatus(404)
+            return res.sendStatus(HttpStatus.NotFound)
         }
         const postId = req.params.id as string
         const updatedPost = postsRepository.updatePost(blog.name, postId, req.body)
         if (!updatedPost) {
-            return res.sendStatus(404)
+            return res.sendStatus(HttpStatus.NotFound)
         }
-        res.sendStatus(204)
+        res.sendStatus(HttpStatus.NoContent)
     })
     .delete('/:id', (req: Request, res: Response) => {
         const postId = req.params.id as string
         const isDeleted = postsRepository.deletePost(postId)
         if (!isDeleted) {
-            return res.sendStatus(404)
+            return res.sendStatus(HttpStatus.NotFound)
         }
-        res.sendStatus(204)
+        res.sendStatus(HttpStatus.NoContent)
     })

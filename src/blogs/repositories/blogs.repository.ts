@@ -1,5 +1,5 @@
 import {db} from "../../db/db";
-import {InputBlogType} from "../routes/blogs.router";
+import {InputBlogType} from "../dto/blogs.input.dto";
 
 export const blogsRepository = {
     allBlogs() {

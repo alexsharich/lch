@@ -1,13 +1,13 @@
 import {NextFunction, Request, Response} from 'express';
-import {HttpStatus} from '../../core/types/http-statuses';
-import {ADMIN_USERNAME, ADMIN_PASSWORD} from '../../settings/config';
+import {HttpStatus} from '../core/types/http-statuses';
+import {ADMIN_USERNAME, ADMIN_PASSWORD} from '../settings/config';
 
-export const superAdminGuardMiddleware = (
+export const adminMiddleware = (
     req: Request,
     res: Response,
     next: NextFunction,
 ) => {
-    const auth = req.headers['authorization'] as string; // 'Basic xxxx'
+    const auth = req.headers['authorization'] as string;
 
     if (!auth) {
         res.sendStatus(HttpStatus.Unauthorized);

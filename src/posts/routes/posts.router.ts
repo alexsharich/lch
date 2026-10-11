@@ -1,50 +1,17 @@
-import {Request, Response, Router} from "express";
-import {postsRepository} from "../repositories/posts.repository";
-import {blogsRepository} from "../../blogs/repositories/blogs.repository";
-import {HttpStatus} from "../../core/types/http-statuses";
+import {Router} from "express";
+import {POSTS_ROUTES} from "../constants/posts.paths";
+import {getPostsHandler} from "../controllers/getPosts.controller";
+import {createPostHandler} from "../controllers/createPost.controller";
+import {getPostByIdHandler} from "../controllers/getPostById.controller";
+import {updatePostHandler} from "../controllers/updatePos.controller";
+import {deletePostHandler} from "../controllers/deletePost.controller";
+import {findPostValidator, postValidator} from "../validations/postValidator";
+import {adminMiddleware} from "../../global-middleware/admin.middleware";
 
 export const postsRouter = Router({})
 postsRouter
-    .get('', (req: Request, res: Response) => {
-        const posts = postsRepository.allPosts()
-        res.sendStatus(HttpStatus.Ok).send(posts)
-    })
-    .post('', (req: Request, res: Response) => {
-        const blog = blogsRepository.findBlog('1')
-        if (!blog) {
-            return res.sendStatus(HttpStatus.NotFound)
-        }
-        const post = postsRepository.createPost(blog.id, blog.name, req.body)
-        if (!post) {
-            return res.sendStatus(HttpStatus.BadRequest)
-        }
-        res.sendStatus(HttpStatus.Created).send(post)
-    })
-    .get('/:id', (req: Request, res: Response) => {
-        const postId = req.params.id as string
-        const post = postsRepository.findPost(postId)
-        if (!post) {
-            return res.sendStatus(HttpStatus.NotFound)
-        }
-        res.sendStatus(HttpStatus.Ok).send(post)
-    })
-    .put('/:id', (req: Request, res: Response) => {
-        const blog = blogsRepository.findBlog('1')
-        if (!blog) {
-            return res.sendStatus(HttpStatus.NotFound)
-        }
-        const postId = req.params.id as string
-        const updatedPost = postsRepository.updatePost(blog.name, postId, req.body)
-        if (!updatedPost) {
-            return res.sendStatus(HttpStatus.NotFound)
-        }
-        res.sendStatus(HttpStatus.NoContent)
-    })
-    .delete('/:id', (req: Request, res: Response) => {
-        const postId = req.params.id as string
-        const isDeleted = postsRepository.deletePost(postId)
-        if (!isDeleted) {
-            return res.sendStatus(HttpStatus.NotFound)
-        }
-        res.sendStatus(HttpStatus.NoContent)
-    })
+    .get(POSTS_ROUTES.ROOT, getPostsHandler)
+    .post(POSTS_ROUTES.ROOT, ...postValidator, createPostHandler)
+    .get(POSTS_ROUTES.BY_ID, getPostByIdHandler)
+    .put(POSTS_ROUTES.BY_ID, adminMiddleware, updatePostHandler)
+    .delete(POSTS_ROUTES.BY_ID, adminMiddleware, deletePostHandler)

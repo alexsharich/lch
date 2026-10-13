@@ -29,8 +29,8 @@ export const blogIdInParamsValidator = param('id').isString().withMessage('not s
         return true
     }).withMessage('no blog')
 
-export const findPostValidator = (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
-    const post = postsRepository.findPost(req.params.id)
+export const findPostValidator = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+    const post = await postsRepository.findPost(req.params.id)
     if (!post) {
 
         res

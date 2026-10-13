@@ -2,10 +2,10 @@ import {db} from "../../db/db";
 import {InputBlogType} from "../dto/blogs.input.dto";
 
 export const blogsRepository = {
-    allBlogs() {
+   async allBlogs() {
         return db.blogs
     },
-    createBlog(blog: InputBlogType) {
+    async createBlog(blog: InputBlogType) {
         const newBlog = {
             id: new Date().toISOString(),
             name: blog.name,
@@ -15,10 +15,10 @@ export const blogsRepository = {
         db.blogs.push(newBlog)
         return newBlog
     },
-    findBlog(id: string) {
+    async findBlog(id: string) {
         return db.blogs.find(b => b.id === id)
     },
-    updateBlog(id: string, blog: InputBlogType) {
+    async updateBlog(id: string, blog: InputBlogType) {
         const index = db.blogs.findIndex(b => b.id === id)
         if (index === -1) {
             return false
@@ -32,7 +32,7 @@ export const blogsRepository = {
         db.blogs[index] = updatedBlog
         return updatedBlog
     },
-    deleteBlog(id: string) {
+    async deleteBlog(id: string) {
         const index = db.blogs.findIndex(b => b.id === id)
         if (index == -1) return false
         db.blogs.splice(index, 1)

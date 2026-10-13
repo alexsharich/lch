@@ -1,8 +1,6 @@
 import {body} from 'express-validator'
 import {blogsRepository} from "../repositories/blogs.repository";
 import {Response, Request, NextFunction} from "express";
-import {STATUS_CODES} from "node:http";
-import {SETTINGS} from "../../settings/config";
 import {HttpStatus} from "../../core/types/http-statuses";
 import {adminMiddleware} from "../../global-middleware/admin.middleware";
 import {inputCheckErrorsMiddleware} from "../../global-middleware/inputCheckErrorsMiddleware";

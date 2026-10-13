@@ -2,10 +2,10 @@ import {db} from "../../db/db";
 import {InputPostType} from "../dto/posts.input.dto";
 
 export const postsRepository = {
-    allPosts() {
+    async allPosts() {
         return db.posts
     },
-    createPost(blogId: string, blogName: string, post: InputPostType) {
+    async createPost(blogId: string, blogName: string, post: InputPostType) {
         const newPost = {
             id: new Date().toISOString(),
             title: post.title,
@@ -17,10 +17,10 @@ export const postsRepository = {
         db.posts.push(newPost)
         return newPost
     },
-    findPost(id: string) {
+    async findPost(id: string) {
         return db.posts.find(p => p.id === id)
     },
-    updatePost(blogName: string, id: string, post: InputPostType) {
+    async updatePost(blogName: string, id: string, post: InputPostType) {
         const index = db.posts.findIndex(p => p.id === id)
         if (index === -1) {
             return false
@@ -35,10 +35,10 @@ export const postsRepository = {
         db.posts[index] = updatedPost
         return updatedPost
     },
-    deletePost(id: string) {
+    async deletePost(id: string) {
         const index = db.posts.findIndex(p => p.id === id)
         if (index == -1) return false
         db.posts.splice(index, 1)
         return true
     }
-    }
+}

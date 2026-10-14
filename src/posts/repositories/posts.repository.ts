@@ -54,7 +54,7 @@ export const postsRepository = {
             return null
         }
     },
-    async updatePost({params, body}: any) {
+    async updatePost({params, body}: {params:string,body:InputPostType}):Promise<any> {
         try {
             const postId = new ObjectId(params)
             const result = await postsCollection.updateOne({_id: postId}, {
@@ -65,13 +65,12 @@ export const postsRepository = {
                     blogId: body.blogId
                 }
             })
-            if (result.matchedCount === 1) return await postsCollection.findOne({_id: postId})
-            return null
+            if (result.matchedCount === 1) return true
         } catch (e) {
             return null
         }
     },
-    async deletePost(id: string) {
+    async deletePost(id: string): Promise<boolean> {
         try {
             const postId = new ObjectId(id)
             const result = await postsCollection.deleteOne({_id: postId})

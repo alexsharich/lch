@@ -1,10 +1,10 @@
 import {Request, Response} from "express";
 import {InputBlogType} from "../dto/blogs.input.dto";
-import {blogsRepository} from "../repositories/blogs.repository";
 import {HttpStatus} from "../../core/types/http-statuses";
+import {blogsService} from "../services/blogs.service";
 
 export async function createBlogHandler(req: Request<{}, {}, InputBlogType>, res: Response) {
-    const blog = await blogsRepository.createBlog(req.body)
+    const blog = await blogsService.createBlog(req.body)
     if (!blog) {
         res.sendStatus(HttpStatus.BadRequest)
         return

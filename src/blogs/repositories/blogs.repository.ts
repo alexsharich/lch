@@ -16,24 +16,16 @@ export const mapToOutputBlog = (blog: WithId<BlogDBType>): OutputBlogType => {
 }
 
 export const blogsRepository = {
-   async allBlogs() {
-       return blogsCollection.find({}).toArray()
+    async allBlogs() {
+        return blogsCollection.find({}).toArray()
     },
-    async createBlog(blog: InputBlogType) {
-        const newBlog: BlogType = {
-            name: blog.name,
-            description: blog.description,
-            websiteUrl: blog.websiteUrl,
-            isMembership: false,
-            createdAt: (new Date().toISOString())
-        }
-
+    async createBlog(newBlog: BlogType) {
         try {
             const createdBlog = await blogsCollection.insertOne(newBlog)
-            console.log('CREATE',createdBlog)
+            console.log('CREATE', createdBlog)
             return createdBlog.insertedId.toHexString()
-        } catch (e){
-            console.log('Create blog error : ',e)
+        } catch (e) {
+            console.log('Create blog error : ', e)
             return null
         }
     },
@@ -48,7 +40,7 @@ export const blogsRepository = {
             return null
         }
     },
-    async updateBlog({params,body}:any) {
+    async updateBlog({params, body}: { params: string, body: InputBlogType }) {
         try {
             const blogId = new ObjectId(params)
 

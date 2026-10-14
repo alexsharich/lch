@@ -1,41 +1,80 @@
-import {db} from "../../db/db";
+import {blogsCollection} from "../../db/collections";
+import {BlogDBType, BlogType} from "../types/blog.types";
+import {ObjectId, WithId} from "mongodb";
+import {OutputBlogType} from "../../input-output-types/blog-types";
 import {InputBlogType} from "../dto/blogs.input.dto";
+
+export const mapToOutputBlog = (blog: WithId<BlogDBType>): OutputBlogType => {
+    return {
+        id: blog._id.toString(),
+        name: blog.name,
+        description: blog.description,
+        websiteUrl: blog.websiteUrl,
+        createdAt: blog.createdAt,
+        isMembership: blog.isMembership,
+    }
+}
 
 export const blogsRepository = {
    async allBlogs() {
-        return db.blogs
+       return blogsCollection.find({}).toArray()
     },
     async createBlog(blog: InputBlogType) {
-        const newBlog = {
-            id: new Date().toISOString(),
+        const newBlog: BlogType = {
             name: blog.name,
             description: blog.description,
-            websiteUrl: blog.websiteUrl
+            websiteUrl: blog.websiteUrl,
+            isMembership: false,
+            createdAt: (new Date().toISOString())
         }
-        db.blogs.push(newBlog)
-        return newBlog
+
+        try {
+            const createdBlog = await blogsCollection.insertOne(newBlog)
+            console.log('CREATE',createdBlog)
+            return createdBlog.insertedId.toHexString()
+        } catch (e){
+            console.log('Create blog error : ',e)
+            return null
+        }
     },
     async findBlog(id: string) {
-        return db.blogs.find(b => b.id === id)
+        try {
+            const blogId = new ObjectId(id)
+            const blog = await blogsCollection.findOne({_id: blogId})
+            if (blog) return mapToOutputBlog(blog)
+            return null
+        } catch (e) {
+            console.log('Blog repository, find blog / find blog ', e)
+            return null
+        }
     },
-    async updateBlog(id: string, blog: InputBlogType) {
-        const index = db.blogs.findIndex(b => b.id === id)
-        if (index === -1) {
-            return false
-        }
+    async updateBlog({params,body}:any) {
+        try {
+            const blogId = new ObjectId(params)
 
-        const updatedBlog = {
-            id: id,
-            ...blog
-        }
+            const result = await blogsCollection.updateOne({_id: blogId}, {
+                $set: {
+                    name: body.name,
+                    description: body.description,
+                    websiteUrl: body.websiteUrl
+                }
+            })
 
-        db.blogs[index] = updatedBlog
-        return updatedBlog
+            if (result.matchedCount === 1) return true
+            return null
+
+        } catch (e) {
+            return null
+        }
     },
     async deleteBlog(id: string) {
-        const index = db.blogs.findIndex(b => b.id === id)
-        if (index == -1) return false
-        db.blogs.splice(index, 1)
-        return true
+        try {
+            const blogId = new ObjectId(id)
+            const result = await blogsCollection.deleteOne({_id: blogId})
+            if (result.deletedCount === 1) return true
+            return false
+        } catch (e) {
+            return false
+        }
     }
 }

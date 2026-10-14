@@ -4,7 +4,7 @@ import {blogsRepository} from "../repositories/blogs.repository";
 import {HttpStatus} from "../../core/types/http-statuses";
 
 export async function updateBlogHandler(req: Request<{ id: string }, {}, InputBlogType>, res: Response) {
-    const blog = await blogsRepository.updateBlog(req.params.id, req.body)
+    const blog = await blogsRepository.updateBlog({params:req.params.id, body:req.body})
     if (!blog) {
         res.sendStatus(HttpStatus.NotFound)
         return

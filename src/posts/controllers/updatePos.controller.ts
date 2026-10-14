@@ -9,7 +9,7 @@ export async function updatePostHandler(req: Request, res: Response) {
         return res.sendStatus(HttpStatus.NotFound)
     }
     const postId = req.params.id as string
-    const updatedPost = await postsRepository.updatePost(blog.name, postId, req.body)
+    const updatedPost = await postsRepository.updatePost({params:postId, body:req.body})
     if (!updatedPost) {
         return res.sendStatus(HttpStatus.NotFound)
     }

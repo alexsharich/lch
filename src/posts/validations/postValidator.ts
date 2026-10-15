@@ -4,6 +4,7 @@ import {postsRepository} from "../repositories/posts.repository";
 import {Request, Response, NextFunction} from "express";
 import {body, param} from "express-validator";
 import {blogsRepository} from "../../blogs/repositories/blogs.repository";
+import {HttpStatus} from "../../core/types/http-statuses";
 
 export const titleValidator = body('title').isString().withMessage('not string')
     .trim().isLength({min: 1, max: 30}).withMessage('more then 30 or 0')
@@ -34,7 +35,7 @@ export const findPostValidator = async (req: Request<{ id: string }>, res: Respo
     if (!post) {
 
         res
-            .status(404)
+            .sendStatus(HttpStatus.NotFound)
             .json({})
         return
     }
@@ -51,4 +52,14 @@ export const postValidator = [
     blogIdValidator,
 
     inputCheckErrorsMiddleware
+]
+export const postForBlogValidator = [
+    adminMiddleware,
+
+    titleValidator,
+    shortDescriptionValidator,
+    contentValidator,
+    blogIdInParamsValidator,
+
+    inputCheckErrorsMiddleware,
 ]

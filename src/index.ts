@@ -1,20 +1,31 @@
-import express from "express";
-import {setupApp} from "./setup-app";
+import {Db, MongoClient} from "mongodb";
+import {initCollections} from "./db/collections";
 import {SETTINGS} from "./settings/config";
-import {runDB} from "./db/mongo.db";
 
+export let client: MongoClient;
 
-const bootstrap = async () => {
-    const app = express();
-    setupApp(app);
+// Подключение к БД
+export async function runDB(url: string): Promise<void> {
+    client = new MongoClient(url);
+    const db: Db = client.db(SETTINGS.DB_NAME);
 
-    await runDB(SETTINGS.MONGO_URL);
+    // Инициализируем коллекции из подключённой базы.
+    initCollections(db);
 
-    const PORT = SETTINGS.PORT
-
-    app.listen(PORT, () => {
-        console.log(`Example app listening on port ${PORT}`);
-    });
-    return app
+    try {
+        await client.connect();
+        await db.command({ ping: 1 });
+        console.log('✅ Connected to the database');
+    } catch (e) {
+        await client.close();
+        throw new Error(`❌ Database is not connected: ${e}`);
+    }
 }
-bootstrap()
+
+// для тестов
+export async function stopDb() {
+    if (!client) {
+        throw new Error(`❌ No active client`);
+    }
+    await client.close();
+}

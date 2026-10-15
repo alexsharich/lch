@@ -3,6 +3,11 @@ import {BlogDBType, BlogType} from "../types/blog.types";
 import {ObjectId, WithId} from "mongodb";
 import {OutputBlogType} from "../../input-output-types/blog-types";
 import {InputBlogType} from "../dto/blogs.input.dto";
+import {PaginationQueriesType} from "../../helpers/pagination-values";
+
+export type SortMongoType = {
+    [key: string]: 1 | -1
+}
 
 export const mapToOutputBlog = (blog: WithId<BlogDBType>): OutputBlogType => {
     return {
@@ -16,8 +21,37 @@ export const mapToOutputBlog = (blog: WithId<BlogDBType>): OutputBlogType => {
 }
 
 export const blogsRepository = {
-    async allBlogs() {
-        return blogsCollection.find({}).toArray()
+    async allBlogs(query: PaginationQueriesType) {
+        try {
+            const pageNumber = query.pageNumber
+            const pageSize = query.pageSize
+            const sortBy = query.sortBy
+            const sortDirection = query.sortDirection === 'asc' ? 1 : -1
+            const searchNameTerm = query.searchNameTerm
+            let filter = {}
+            if (searchNameTerm) {
+                filter = {name: {$regex: searchNameTerm, $options: 'i'}}
+            }
+
+            const sortFilter: SortMongoType = {[sortBy]: sortDirection} as SortMongoType
+
+            const blogs = await blogsCollection.find(filter)
+                .sort(sortFilter)
+                .skip((pageNumber - 1) * pageSize)
+                .limit(pageSize)
+                .toArray()
+            const totalCount = await blogsCollection.countDocuments(filter)
+            return {
+                pagesCount: Math.ceil(totalCount / query.pageSize),
+                page: query.pageNumber,
+                pageSize: query.pageSize,
+                totalCount: totalCount,
+                items: blogs.map((blog: WithId<BlogDBType>) => mapToOutputBlog(blog))
+            }
+        } catch (e) {
+            console.log('blogs query repo / get blogs : ', e)
+            throw new Error('Blogs not found')
+        }
     },
     async createBlog(newBlog: BlogType) {
         try {

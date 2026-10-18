@@ -5,6 +5,8 @@ import {blogsRouter} from "./blogs/routes/blogs.router";
 import {postsRouter} from "./posts/routes/posts.router";
 import {BLOGS_PATH} from "./blogs/constants/blogs.paths";
 import {POSTS_PATH} from "./posts/constants/posts.paths";
+import {AUTH_PATH} from "./auth/constants/auth.paths";
+import {authRouter} from "./auth/routes/auth.router";
 
 export const setupApp = (app: Express) => {
     app.use(express.json());
@@ -16,4 +18,5 @@ export const setupApp = (app: Express) => {
     app.use(POSTS_PATH,postsRouter)
     app.use('/drivers', driversRouter)
     app.use('testing', testingRouter)
+    app.use(AUTH_PATH,authRouter)
 };

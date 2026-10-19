@@ -4,12 +4,12 @@ import {SETTINGS} from "./settings/config";
 
 export let client: MongoClient;
 
-// Подключение к БД
+
 export async function runDB(url: string): Promise<void> {
     client = new MongoClient(url);
     const db: Db = client.db(SETTINGS.DB_NAME);
 
-    // Инициализируем коллекции из подключённой базы.
+
     initCollections(db);
 
     try {
@@ -22,7 +22,6 @@ export async function runDB(url: string): Promise<void> {
     }
 }
 
-// для тестов
 export async function stopDb() {
     if (!client) {
         throw new Error(`❌ No active client`);

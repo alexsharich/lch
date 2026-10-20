@@ -8,6 +8,7 @@ export async function runDB(url: string): Promise<void> {
     client = new MongoClient(url);
     const db: Db = client.db(SETTINGS.DB_NAME);
 
+
     initCollections(db);
 
 

@@ -10,7 +10,6 @@ export async function runDB(url: string): Promise<void> {
 
     initCollections(db);
 
-
     try {
         await client.connect();
         await db.command({ping: 1});

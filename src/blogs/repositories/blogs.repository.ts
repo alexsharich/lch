@@ -1,9 +1,9 @@
-import {blogsCollection} from "../../db/collections";
 import {BlogDBType, BlogType} from "../types/blog.types";
 import {ObjectId, WithId} from "mongodb";
 import {OutputBlogType} from "../../input-output-types/blog-types";
 import {InputBlogType} from "../dto/blogs.input.dto";
 import {PaginationQueriesType} from "../../helpers/pagination-values";
+import {blogsCollection} from "../../db/mongo.db";
 
 export type SortMongoType = {
     [key: string]: 1 | -1

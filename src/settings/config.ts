@@ -1,10 +1,14 @@
+import {config} from 'dotenv'
+
+config()
+
 const env = process.env;
 
 export const ADMIN_USERNAME = env.ADMIN_USERNAME || 'admin';
 export const ADMIN_PASSWORD = env.ADMIN_PASSWORD || 'qwerty';
 
 export const SETTINGS = {
-    PORT: env.PORT || 5001,
-    MONGO_URL: env.MONGO_URL || 'mongodb+srv://',
-    DB_NAME: env.DB_NAME || 'test-db'
+    PORT: process.env.PORT || 5001,
+    MONGO_URL: process.env.MONGO_URL || 'localhost://27017',
+    DB_NAME: process.env.DB_NAME || 'test-db'
 };

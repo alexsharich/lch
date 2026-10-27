@@ -1,6 +1,7 @@
 import {Response, Request} from "express";
 import {HttpStatus} from "../../core/types/http-statuses";
 import {authService} from "../services/auth.service";
+import {jwtService} from "../../application/jwtService";
 
 export type InputLoginType = {
     loginOrEmail: string,
@@ -8,10 +9,11 @@ export type InputLoginType = {
 }
 
 export const loginHandler = async (req: Request<{}, {}, InputLoginType>, res: Response) => {
-    const isLogined = await authService.loginOrEmail(req.body)
-    if (!isLogined) {
-        res.sendStatus(HttpStatus.Unauthorized)
+    const userId = await authService.loginOrEmail(req.body)
+    if (userId) {
+        const accessToken = jwtService.createToken(userId)
+        res.status(HttpStatus.Ok).json({accessToken})
         return
     }
-    res.sendStatus(HttpStatus.NoContent)
+    res.sendStatus(HttpStatus.Unauthorized)
 }

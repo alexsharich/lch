@@ -1,25 +1,29 @@
-import { Collection, Db } from 'mongodb';
+import {Collection, Db} from 'mongodb';
 import {PostType} from "../posts/types/post.types";
 import {BlogType} from "../blogs/types/blog.types";
 import {UserType} from "../users/types/user.types";
+import {CommentType} from "../comments/types/comments.type";
 
 
 export const BLOGS_COLLECTION_NAME = 'blogs';
 export const POSTS_COLLECTION_NAME = 'posts';
 export const USERS_COLLECTION_NAME = 'users'
+export const COMMENTS_COLLECTION_NAME = 'comments'
 
 
 export let blogsCollection: Collection<BlogType>;
 export let postsCollection: Collection<PostType>;
-export let usersCollection:Collection<UserType>
+export let usersCollection: Collection<UserType>
+export let commentsCollection: Collection<CommentType>
 
 
 export function initCollections(db: Db): void {
     blogsCollection = db.collection<BlogType>(BLOGS_COLLECTION_NAME);
     postsCollection = db.collection<PostType>(POSTS_COLLECTION_NAME);
     usersCollection = db.collection<UserType>(USERS_COLLECTION_NAME)
+    commentsCollection = db.collection<CommentType>(COMMENTS_COLLECTION_NAME)
 }
 
 export function getAllCollections(): Collection<any>[] {
-    return [blogsCollection, postsCollection,usersCollection];
+    return [blogsCollection, postsCollection, usersCollection];
 }

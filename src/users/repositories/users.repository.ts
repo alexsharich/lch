@@ -1,14 +1,16 @@
 import {ObjectId} from "mongodb";
-import {UserDBType} from "../types/user.types";
 import {usersCollection} from "../../db/mongo.db";
+import {UserAccountDBType} from "../types/user.types";
+import { add } from "date-fns";
+import {v4 as uuidv4} from 'uuid'
 
 export const usersRepository = {
-    async createUser(user: UserDBType): Promise<string | null> {
+    async createUser(user: UserAccountDBType): Promise<string | null> {
         try {
             const createdUser = await usersCollection.insertOne(user)
-            return createdUser.insertedId.toHexString()
+            return createdUser.insertedId.toString()
         } catch (e) {
-            console.log('Create blog error : ', e)
+            console.log('Create user error : ', e)
             return null
         }
     },
@@ -26,5 +28,22 @@ export const usersRepository = {
     },
     async checkUniqUserWithEmailOrLogin(login: string, email: string) {
         return await usersCollection.findOne({$or: [{login: login}, {email: email}]})
+    },
+    async updateConfirmation(userId: any) {
+        const result = await usersCollection.updateOne({_id: userId}, {$set: {'emailConfirmation.isConfirmed': true}})
+        return result.modifiedCount === 1
+    },
+    async findUserByConfirmationCode(emailConfirmationCode: string) {
+        const user = await usersCollection.findOne({'emailConfirmation.confirmationCode': emailConfirmationCode})
+        return user
+    },
+    async updateCode(userId: ObjectId) {
+        const newExpirationDate = add(new Date(), {hours: 1})
+        await usersCollection.updateOne({_id: userId}, {
+            $set: {
+                'emailConfirmation.expirationDate': newExpirationDate,
+                'emailConfirmation.confirmationCode': uuidv4(),
+            }
+        })
     },
 }

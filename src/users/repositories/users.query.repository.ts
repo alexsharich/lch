@@ -1,16 +1,16 @@
 import {SortMongoType} from "../../blogs/repositories/blogs.repository";
 import {ObjectId, WithId} from "mongodb";
-import {UserDBType} from "../types/user.types";
+import {UserAccountDBType} from "../types/user.types";
 import {PaginationQueriesUsersType} from "../../helpers/pagination-values";
 import {OutputUserType} from "../../input-output-types/user-types";
 import {usersCollection} from "../../db/mongo.db";
 
-const mapToOutputUser = (user: WithId<UserDBType>): OutputUserType => {
+const mapToOutputUser = (user: WithId<UserAccountDBType>): OutputUserType => {
     return {
         id: user._id.toString(),
-        login: user.login,
-        email: user.email,
-        createdAt: user.createdAt
+        login: user.accountData.userName,
+        email: user.accountData.email,
+        createdAt: user.accountData.createdAt
     }
 }
 
@@ -56,7 +56,7 @@ export const usersQueryRepository = {
                 page: query.pageNumber,
                 pageSize: query.pageSize,
                 totalCount: totalCount,
-                items: users.map((user: WithId<UserDBType>) => mapToOutputUser(user))
+                items: users.map((user: WithId<UserAccountDBType>) => mapToOutputUser(user))
             }
         } catch (e) {
             console.log('blogs query repo / get blogs : ', e)

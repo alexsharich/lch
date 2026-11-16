@@ -1,6 +1,6 @@
 import {PostDBType} from "../posts/types/post.types";
 import {BlogDBType} from "../blogs/types/blog.types";
-import {UserDBType} from "../users/types/user.types";
+import {UserAccountDBType, UserDBType} from "../users/types/user.types";
 import {MongoClient} from "mongodb";
 import dotenv from 'dotenv'
 
@@ -15,7 +15,7 @@ const DB = client.db('social')
 export const postsCollection = DB.collection<PostDBType>('posts')
 export const blogsCollection = DB.collection<BlogDBType>('blogs')
 
-export const usersCollection = DB.collection<UserDBType>('users')
+export const usersCollection = DB.collection<UserAccountDBType>('users')
 
 export async function runDb() {
     try {

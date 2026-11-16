@@ -3,5 +3,7 @@ export const AUTH_ROUTES = {
     ROOT: '',
     LOGIN: '/login',
     ME: '/me',
-    REGISTRATION: '/registration'
+    REGISTRATION: '/registration',
+    REGISTRATION_CONFIRMATION:'/registration-confirmation',
+    REGISTRATION_EMAIL_RESENDING:'/registration-email-resending'
 } as const

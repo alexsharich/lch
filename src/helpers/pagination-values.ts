@@ -1,22 +1,36 @@
 export {Request} from 'express'
 
 export type SortType = 'desc' | 'asc'
-export type PaginationQueriesType ={
-    pageNumber  : number
-    pageSize : number
-    sortBy  : string
+export type PaginationQueriesType = {
+    pageNumber: number
+    pageSize: number
+    sortBy: string
     sortDirection: SortType
-    searchNameTerm : string | null
+    searchNameTerm: string | null
 }
-export type PaginationQueriesUsersType ={
-    pageNumber  : number
-    pageSize : number
-    sortBy  : string
+export type PaginationQueriesUsersType = {
+    pageNumber: number
+    pageSize: number
+    sortBy: string
     sortDirection: SortType
-    searchLoginTerm : string | null
-    searchEmailTerm:string |null
+    searchLoginTerm: string | null
+    searchEmailTerm: string | null
 }
-export const paginationQueries = (query:PaginationQueriesType) => {
+export type PaginationQueriesCommentType = {
+    pageNumber: number
+    pageSize: number
+    sortBy: string
+    sortDirection: SortType
+}
+export const paginationQueriesComment = (query: PaginationQueriesCommentType) => {
+    const pageNumber = query.pageNumber ? +query.pageNumber : 1
+    const pageSize = query.pageSize ? +query.pageSize : 10
+    const sortBy = query.sortBy ? query.sortBy.toString() : 'createdAt'
+    const sortDirection: SortType = query.sortDirection && query.sortDirection === 'asc' ? 'asc' : 'desc'
+
+    return {pageNumber, pageSize, sortBy, sortDirection}
+}
+export const paginationQueries = (query: PaginationQueriesType) => {
     const pageNumber = query.pageNumber ? +query.pageNumber : 1
     const pageSize = query.pageSize ? +query.pageSize : 10
     const sortBy = query.sortBy ? query.sortBy.toString() : 'createdAt'
@@ -25,7 +39,7 @@ export const paginationQueries = (query:PaginationQueriesType) => {
 
     return {pageNumber, pageSize, sortBy, sortDirection, searchNameTerm}
 }
-export const paginationQueriesForUsers = (query:PaginationQueriesUsersType) => {
+export const paginationQueriesForUsers = (query: PaginationQueriesUsersType) => {
     const pageNumber = query.pageNumber ? +query.pageNumber : 1
     const pageSize = query.pageSize ? +query.pageSize : 10
     const sortBy = query.sortBy ? query.sortBy.toString() : 'createdAt'
@@ -33,5 +47,5 @@ export const paginationQueriesForUsers = (query:PaginationQueriesUsersType) => {
     const searchLoginTerm = query.searchLoginTerm ? query.searchLoginTerm.toString() : null
     const searchEmailTerm = query.searchEmailTerm ? query.searchEmailTerm.toString() : null
 
-    return {pageNumber, pageSize, sortBy, sortDirection,searchLoginTerm, searchEmailTerm}
+    return {pageNumber, pageSize, sortBy, sortDirection, searchLoginTerm, searchEmailTerm}
 }

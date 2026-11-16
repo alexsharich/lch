@@ -30,6 +30,9 @@ export const blogIdInParamsValidator = param('id').isString().withMessage('not s
         return true
     }).withMessage('no blog')
 
+export const contentForCommentValidator = body('content').isString().withMessage('not string')
+    .trim().isLength({min: 20, max: 300}).withMessage('more then 300 or min 20')
+
 export const findPostValidator = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
     const post = await postsRepository.findPost(req.params.id)
     if (!post) {
@@ -60,6 +63,11 @@ export const postForBlogValidator = [
     shortDescriptionValidator,
     contentValidator,
     blogIdInParamsValidator,
+
+    inputCheckErrorsMiddleware,
+]
+export const commentContentValidator = [
+    contentForCommentValidator,
 
     inputCheckErrorsMiddleware,
 ]

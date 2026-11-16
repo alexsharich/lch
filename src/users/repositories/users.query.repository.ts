@@ -1,9 +1,9 @@
 import {SortMongoType} from "../../blogs/repositories/blogs.repository";
-import {usersCollection} from "../../db/collections";
 import {ObjectId, WithId} from "mongodb";
 import {UserDBType} from "../types/user.types";
 import {PaginationQueriesUsersType} from "../../helpers/pagination-values";
 import {OutputUserType} from "../../input-output-types/user-types";
+import {usersCollection} from "../../db/mongo.db";
 
 const mapToOutputUser = (user: WithId<UserDBType>): OutputUserType => {
     return {

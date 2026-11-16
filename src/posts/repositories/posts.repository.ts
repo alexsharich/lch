@@ -1,10 +1,10 @@
 import {InputPostType} from "../dto/posts.input.dto";
-import {blogsCollection, postsCollection} from "../../db/collections";
 import {PostDBType, PostType} from "../types/post.types";
 import {blogsRepository, SortMongoType} from "../../blogs/repositories/blogs.repository";
 import {ObjectId, WithId} from "mongodb";
 import {OutputPostType} from "../../input-output-types/post-types";
 import {PaginationQueriesType} from "../../helpers/pagination-values";
+import {blogsCollection, postsCollection} from "../../db/mongo.db";
 
 export const mapToOutputPost = (post: WithId<PostDBType>): OutputPostType => {
     return {

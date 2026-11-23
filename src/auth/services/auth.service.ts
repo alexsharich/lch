@@ -68,4 +68,10 @@ export const authService = {
         }
         return createResult
     },
+    async addTokenToBlackList(oldRefreshToken: string) {
+        return await usersRepository.tokenToBlackList(oldRefreshToken)
+    },
+    async checkTokenInBlackList(refreshToken: string) {
+        return await usersRepository.checkTokenInBlackList(refreshToken)
+    }
 }

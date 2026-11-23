@@ -1,8 +1,9 @@
 import {PostDBType} from "../posts/types/post.types";
 import {BlogDBType} from "../blogs/types/blog.types";
-import {UserAccountDBType, UserDBType} from "../users/types/user.types";
+import {UserAccountDBType} from "../users/types/user.types";
 import {MongoClient} from "mongodb";
 import dotenv from 'dotenv'
+import {BlackListDBType} from "./black_list_db_type";
 
 dotenv.config()
 
@@ -16,6 +17,8 @@ export const postsCollection = DB.collection<PostDBType>('posts')
 export const blogsCollection = DB.collection<BlogDBType>('blogs')
 
 export const usersCollection = DB.collection<UserAccountDBType>('users')
+
+export const blackListCollection = DB.collection<BlackListDBType>('blackList')
 
 export async function runDb() {
     try {

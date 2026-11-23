@@ -2,6 +2,7 @@ import {Response, Request} from "express";
 import {HttpStatus} from "../../core/types/http-statuses";
 import {authService} from "../services/auth.service";
 import {jwtService} from "../../application/jwtService";
+import {daysToMs} from "../../managers/daysToMs";
 
 export type InputLoginType = {
     loginOrEmail: string,
@@ -10,10 +11,17 @@ export type InputLoginType = {
 
 export const loginHandler = async (req: Request<{}, {}, InputLoginType>, res: Response) => {
     const userId = await authService.loginOrEmail(req.body)
-    if (userId) {
-        const accessToken = jwtService.createToken(userId)
-        res.status(HttpStatus.Ok).json({accessToken})
+    if (!userId) {
+        res.sendStatus(HttpStatus.Unauthorized)
         return
+
     }
-    res.sendStatus(HttpStatus.Unauthorized)
+    const {accessToken, refreshToken} = jwtService.createToken(userId)
+    res.cookie('refreshToken', refreshToken, {
+        maxAge: (daysToMs(3)),
+        httpOnly: true,
+        secure: true
+    })
+    res.status(HttpStatus.Ok).json({accessToken})
+    return
 }

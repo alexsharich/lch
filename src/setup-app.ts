@@ -11,6 +11,8 @@ import {USERS_PATH} from "./users/constants/users.paths";
 import {AUTH_PATH} from "./auth/constants/auth.paths";
 import {COMMENTS_PATH} from "./comments/constants/comments.paths";
 import {commentsRouter} from "./comments/routes/comments.router";
+import {DEVICES_PATH} from "./devices/constants/device.paths";
+import {devicesRouter} from "./devices/routes/device.router";
 
 export const app = express()
 app.use(express.json())
@@ -25,3 +27,4 @@ app.use(BLOGS_PATH, blogsRouter)
 app.use(COMMENTS_PATH, commentsRouter)
 app.use(USERS_PATH, usersRouter)
 app.use(AUTH_PATH, authRouter)
+app.use(DEVICES_PATH, devicesRouter)

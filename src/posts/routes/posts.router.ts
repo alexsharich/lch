@@ -9,12 +9,9 @@ import {commentContentValidator, postValidator} from "../validations/postValidat
 import {adminMiddleware} from "../../global-middleware/admin.middleware";
 import {getCommentsForPostHandler} from "../controllers/getCommentsForPost.controller";
 import {authMiddleware} from "../../global-middleware/auth.middleware";
+import {createCommentForPostHandler} from "../controllers/createCommentForPost.controller";
 
 export const postsRouter = Router({})
-
-function createCommentForPostHandler() {
-
-}
 
 postsRouter
     .get(POSTS_ROUTES.ROOT, getPostsHandler)

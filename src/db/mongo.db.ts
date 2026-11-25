@@ -4,6 +4,7 @@ import {UserAccountDBType} from "../users/types/user.types";
 import {MongoClient} from "mongodb";
 import dotenv from 'dotenv'
 import {BlackListDBType} from "./black_list_db_type";
+import {Device} from "../devices/types/deviceDBType";
 
 dotenv.config()
 
@@ -15,10 +16,9 @@ const client = new MongoClient(mongoUri)
 const DB = client.db('social')
 export const postsCollection = DB.collection<PostDBType>('posts')
 export const blogsCollection = DB.collection<BlogDBType>('blogs')
-
 export const usersCollection = DB.collection<UserAccountDBType>('users')
-
 export const blackListCollection = DB.collection<BlackListDBType>('blackList')
+export const devicesCollection = DB.collection<Device>('devices')
 
 export async function runDb() {
     try {

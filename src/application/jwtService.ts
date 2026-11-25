@@ -1,6 +1,10 @@
-import jwt from 'jsonwebtoken'
+import jwt, {JwtPayload} from 'jsonwebtoken'
 import {SETTINGS} from "../settings/config";
 
+interface MyJwtPayload extends JwtPayload {
+    userId: string
+    deviceId: string
+}
 
 export const jwtService = {
     createToken(userId: string) {
@@ -10,7 +14,7 @@ export const jwtService = {
     },
     decodeToken(token: string) {
         try {
-            return jwt.decode(token)
+            return <MyJwtPayload>jwt.decode(token)
         } catch (error) {
             console.log('Cant decode token', error)
             return null
@@ -18,14 +22,14 @@ export const jwtService = {
     },
     verifyToken(token: string) {
         try {
-            return jwt.verify(token, SETTINGS.JWT_ACCESS) as { userId: string }
+            return <MyJwtPayload>jwt.verify(token, SETTINGS.JWT_ACCESS) as { userId: string }
         } catch (error) {
             return null
         }
     },
     verifyRefreshToken(token: string) {
         try {
-            return jwt.verify(token, SETTINGS.JWT_REFRESH) as { userId: string }
+            return <MyJwtPayload>jwt.verify(token, SETTINGS.JWT_REFRESH) as { userId: string }
         } catch (error) {
             return null
         }
